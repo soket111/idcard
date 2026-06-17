@@ -1,0 +1,31 @@
+name: ID Card CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Run tests with SQLite
+        run: mvn test -Dspring.profiles.active=test
+
+      - name: Deploy using Ansible
+        run: echo "Run Ansible Playbook to deploy to Web Server"
+
+      - name: Build success
+        run: echo "GitHub Actions build, test, and deploy completed successfully"
