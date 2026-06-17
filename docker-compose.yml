@@ -1,0 +1,18 @@
+services:
+  web:
+    image: webdevops/php-nginx:8.3
+    container_name: idcard-web
+    ports:
+      - "8443:80"
+      - "2222:22"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: idcard-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Hello@123
+      MYSQL_DATABASE: B-THOUNG_Soket-db
+    ports:
+      - "3307:3306"
