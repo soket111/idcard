@@ -1,36 +1,36 @@
----
-- name: Question 3 - Build, test, and backup ID Card project
-  hosts: web
-  become: false
+  ---
+  - name: Question 3 - Build, test, and backup ID Card project
+    hosts: web
+    become: false
 
-  tasks:
-    - name: Show current directory
-      command: pwd
-      register: pwd_output
+    tasks:
+      - name: Show current directory
+        command: pwd
+        register: pwd_output
 
-    - name: Git pull latest code
-      command: git pull
-      register: git_pull_output
-      ignore_errors: yes
+      - name: Git pull latest code
+        command: git pull
+        register: git_pull_output
+        ignore_errors: yes
 
-    - name: Build project using Maven
-      command: mvn clean package -DskipTests
-      register: build_output
+      - name: Build project using Maven
+        command: mvn clean package -DskipTests
+        register: build_output
 
-    - name: Run tests using Maven
-      command: mvn test
-      register: test_output
-      ignore_errors: yes
+      - name: Run tests using Maven
+        command: mvn test
+        register: test_output
+        ignore_errors: yes
 
-    - name: Backup MySQL database
-      shell: docker exec idcard-mysql mysqldump -u root -pHello@123 "B-THOUNG_Soket-db" > backup.sql
-      register: backup_output
+      - name: Backup MySQL database
+        shell: docker exec idcard-mysql mysqldump -u root -pHello@123 "B-THOUNG_Soket-db" > backup.sql
+        register: backup_output
 
-    - name: Print results
-      debug:
-        msg:
-          - "PWD: {{ pwd_output.stdout }}"
-          - "Git pull: {{ git_pull_output.stdout }}"
-          - "Build: {{ build_output.rc }}"
-          - "Test: {{ test_output.rc }}"
-          - "Backup created: backup.sql"
+      - name: Print results
+        debug:
+          msg:
+            - "PWD: {{ pwd_output.stdout }}"
+            - "Git pull: {{ git_pull_output.stdout }}"
+            - "Build: {{ build_output.rc }}"
+            - "Test: {{ test_output.rc }}"
+            - "Backup created: backup.sql"

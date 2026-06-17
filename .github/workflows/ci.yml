@@ -9,23 +9,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Build with Maven
+      - name: Build using Maven
         run: mvn clean package -DskipTests
 
-      - name: Run tests with SQLite
+      - name: Run tests using SQLite
         run: mvn test -Dspring.profiles.active=test
 
-      - name: Deploy using Ansible
-        run: echo "Run Ansible Playbook to deploy to Web Server"
+      - name: Run Ansible Playbook to deploy
+        run: |
+          echo "Running Ansible Playbook"
+          echo "ansible-playbook -i inventory.ini deploy.yml"
+          echo "Deploy to Web Server completed"
 
-      - name: Build success
-        run: echo "GitHub Actions build, test, and deploy completed successfully"
+      - name: Send email on failure
+        if: failure()
+        run: |
+          echo "Build failed"
+          echo "Send email to: srengty@gmail.com"
+          echo "Send email to developer: ${{ github.event.head_commit.author.email }}"
